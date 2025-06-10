@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug REST API",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/index.js", // Zmień na ścieżkę do Twojego głównego pliku serwera (np. app.js)
+            "restart": true, // Opcjonalne: Uruchamia serwer ponownie przy zmianach w kodzie (jak nodemon)
+            "cwd": "${workspaceFolder}", // Ustawia katalog roboczy na katalog główny projektu
+            "env": {
+                "NODE_ENV": "development",
+                "PORT": "4000" // Jeśli Twój serwer używa zmiennej PORT
+                // Dodaj inne zmienne środowiskowe, których używasz w API
+            }
+        }
+    ]
+}
