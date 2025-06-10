@@ -8,17 +8,3 @@ export function getAll() {
         });
     });
 }
-
-
-// GET SUBJECTS
-// app.get('/subjects', (req, res) => {
-
-//     db.query('SELECT * FROM subjects', (err, results) => {
-//         if (err) {
-//             console.error('Błąd podczas pobierania tematów:', err);
-//             res.status(500).json({ error: 'Błąd serwera' });
-//             return;
-//         }
-//         res.json(results);
-//     });
-// });
