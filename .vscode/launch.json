@@ -4,6 +4,47 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Jest All Tests (ESM)",
+            "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+            "args": [
+                "--runInBand", // Uruchamia testy szeregowo, ułatwia debugowanie
+                "--watchAll=false" // Nie włączaj watch mode, jeśli chcesz tylko raz uruchomić
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal", // Użyj zintegrowanego terminala do wyświetlania wyjścia Jest
+            "internalConsoleOptions": "neverOpen", // Zapobiega otwieraniu dodatkowej konsoli
+            "runtimeArgs": [
+                "--experimental-vm-modules" // Konieczne dla ES Modules w Jest
+            ],
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Jest Current File (ESM)",
+            "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+            "args": [
+                "${file}", // Uruchamia tylko aktualnie otwarty plik testowy
+                "--runInBand",
+                "--watchAll=false"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--experimental-vm-modules"
+            ],
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Debug REST API",
             "skipFiles": [
                 "<node_internals>/**"
