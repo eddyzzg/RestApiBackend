@@ -1,0 +1,22 @@
+// tsconfig.json
+{
+    "compilerOptions": {
+        "target": "ES2022", /* Określ wersję języka JavaScript, na którą zostanie skompilowany kod. ES2022 jest dobrym wyborem dla Node.js. */
+        "module": "CommonJS", /* Określ system modułów, który ma być używany (CommonJS dla Node.js). Node16/NodeNext jest nowsze i lepsze dla ESM. */
+        "outDir": "./dist", /* Katalog, do którego zostaną skompilowane pliki JavaScript. */
+        "rootDir": "./src", /* Katalog główny z plikami TypeScript. Zakładamy, że twój kod będzie w 'src'. */
+        "esModuleInterop": true, /* Umożliwia domyślny import CommonJS jako modułów ES. Bardzo przydatne dla kompatybilności. */
+        "forceConsistentCasingInFileNames": true, /* Wymusza spójne nazewnictwo plików i wielkość liter. */
+        "strict": true, /* Włącza wszystkie rygorystyczne opcje sprawdzania typów. ZALECANE! */
+        "skipLibCheck": true, /* Pomija sprawdzanie typów w plikach deklaracji bibliotek (np. z node_modules) dla zwiększenia prędkości. */
+        "resolveJsonModule": true, /* Umożliwia importowanie modułów .json. */
+        "sourceMap": true /* Generuje pliki map źródeł (.map), które pomagają w debugowaniu skompilowanego kodu. */
+    },
+    "include": [
+        "src/**/*.ts"
+    ], /* Określ, które pliki TypeScript mają być kompilowane. */
+    "exclude": [
+        "node_modules",
+        "dist"
+    ] /* Określ, które katalogi mają być ignorowane przez kompilator. */
+}

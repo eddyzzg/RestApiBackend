@@ -1,10 +1,15 @@
 export default {
     testEnvironment: 'node',
     testMatch: [
-        "**/tests/**/*.test.js" // Testy w folderze tests/ z rozszerzeniem .test.js
-    ],
-    transformIgnorePatterns: [
-        '/node_modules/(?!your-es-module-that-needs-transforming)'
+        "**/tests/**/*.test.js"
     ],
     clearMocks: true,
+
+    transform: {
+        '^.+\\.js$': 'babel-jest',
+    },
+
+    transformIgnorePatterns: [
+        '/node_modules/'
+    ]
 };
