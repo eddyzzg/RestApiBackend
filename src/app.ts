@@ -1,51 +1,62 @@
-// src/app.ts (lub src/index.ts)
-
-import 'dotenv/config'; // Importuje i ładuje zmienne środowiskowe z pliku .env
-
-import express, { Request, Response, NextFunction } from 'express'; // Jawny import typów z Express
+import 'dotenv/config'; // Lepszy sposób na załadowanie dotenv w nowszych wersjach
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 
-// Import routerów (pamiętaj, że ich pliki .js powinny być już przekonwertowane na .ts)
-import authRouter from './routes/auth'; // Bez .js
-import usersRouter from './routes/users'; // Bez .js
-import subjectsRouter from './routes/subjects'; // Bez .js
+// Importuj funkcje połączeniowe z db.ts
+import { connectMySQL, connectMongoDB } from './config/db';
 
-// Import middleware do obsługi błędów (pamiętaj o konwersji na .ts)
-import errorHandler from './middleware/errorHandler'; // Bez .js
+// Import routerów
+import authRouter from './routes/auth';
+import usersRouter from './routes/users';
+import subjectsRouter from './routes/subjects';
+
+// Import middleware do obsługi błędów
+import errorHandler from './middleware/errorHandler';
 
 const app = express();
-const port: number = parseInt(process.env.PORT || '4000', 10); // Pobieramy port ze zmiennych środowiskowych lub domyślnie 4000
+const port: number = parseInt(process.env.PORT || '4000', 10);
 
 // --- Konfiguracja Middleware ---
-app.use(cors()); // Włącza Cross-Origin Resource Sharing
-app.use(express.json()); // Włącza parsowanie JSON dla ciał żądań
+app.use(cors());
+app.use(express.json());
 
-// --- Routing ---
+// --- Funkcja startowa aplikacji ---
+async function startApp() {
+    try {
+        await connectMySQL();
+        await connectMongoDB();
 
-// Router dla autentykacji (np. login, register)
-app.use(authRouter);
+        // Router dla autentykacji (np. login, register)
+        app.use(authRouter);
 
-// TEN SAM errorHandler z `middleware/errorHandler.ts`
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction): void => {
-    console.error(err);
-    const message = err.message || 'An unexpected error occurred';
-    res.status(500).json({ message }) as Response;
-    return;
-});
+        // Routery dla zasobów (users, subjects)
+        app.use('/users', usersRouter);
+        app.use('/subjects', subjectsRouter);
 
-// Główny endpoint powitalny
-app.get('/', (_req: Request, res: Response) => res.send('Backend is running!'));
+        // Główny endpoint powitalny
+        app.get('/', (_req: Request, res: Response) => res.send('Backend is running!'));
 
-// Routing dla zasobów (users, subjects)
-app.use('/users', usersRouter);
-app.use('/subjects', subjectsRouter);
+        // ale przed globalnym 'catch-all'.
+        app.use((err: Error, _req: Request, res: Response, _next: NextFunction): void => {
+            console.error(err);
+            const message = err.message || 'An unexpected error occurred';
+            res.status(500).json({ message }); // Zamiast 'as Response'
+            return;
+        });
 
-// Globalny handler błędów (Catch-all error handler)
-// To jest ostatni middleware, który łapie wszystkie błędy, które nie zostały obsłużone wcześniej.
-app.use(errorHandler);
+        // Globalny handler błędów (Catch-all error handler)
+        app.use(errorHandler);
 
-// --- Uruchomienie Serwera ---
-app.listen(port, () => {
-    console.log(`Server running on: http://localhost:${port}`);
-    console.log(`TypeScript Express App listening on port ${port}`);
-});
+        // --- Uruchomienie Serwera ---
+        app.listen(port, () => {
+            console.log(`Server running on: http://localhost:${port}`);
+            console.log(`TypeScript Express App listening on port ${port}`);
+        });
+
+    } catch (error) {
+        console.error('Aplikacja nie mogła się uruchomić z powodu błędu połączenia z bazą danych:', error);
+        process.exit(1);
+    }
+}
+
+startApp();

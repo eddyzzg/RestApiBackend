@@ -5,14 +5,14 @@ class HttpError extends Error {
     constructor(message: string, status: number = 500) {
         super(message);
         this.status = status;
-        // Ważne dla poprawnego dziedziczenia w TypeScript (zwłaszcza dla starszych celów kompilacji)
+        // dla TypeScript
         Object.setPrototypeOf(this, HttpError.prototype);
     }
 }
 
 /**
  * Globalny middleware do obsługi błędów w aplikacji Express.
- * Wyłapuje błędy przekazane przez `next(err)` z innych middleware'ów lub tras.
+ * Wyłapuje błędy przekazane przez `next(err)` z innych middleware'ów lub routów.
  *
  * @param err Obiekt błędu.
  * @param req Obiekt żądania Express.

@@ -88,9 +88,16 @@ export async function login(req: Request<unknown, unknown, LoginRequestBody>, re
 
         const user = rows[0];
 
+        if (user.password === undefined) {
+            console.log(user.password);
+            res.status(401).json({ message: 'Invalid credentials format' });
+            return;
+        }
+        const passString: string = user.password?.toString();
+
         // bcrypt.compare expects string for hash. user.password can be undefined if SELECT didn't include it
         // We add a check for user.password to ensure it's a string, or provide a default empty string.
-        const isValid = await bcrypt.compare(password, user.password || '');
+        const isValid = await bcrypt.compare(password, passString || '');
 
         if (!isValid) {
             res.status(401).json({ message: 'Invalid credentials' });
