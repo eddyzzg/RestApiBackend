@@ -17,7 +17,7 @@ export interface CreateOrderRequest {
 
 /**
  * Pobiera wszystkie rekordy z tabeli 'subjects'.
- *
+ *  
  * @returns {Promise<Order[]>} Promise.
  */
 export async function getAll(): Promise<Order[]> {
@@ -32,8 +32,16 @@ export async function getAll(): Promise<Order[]> {
 
 export async function create(inputData: CreateOrderRequest): Promise<Order> {
     const { customer, total, date } = inputData;
+
+    //format date
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
+        throw new Error('Invalid date');
+    }
+    const formattedDate = dateObj.toISOString().slice(0, 19).replace('T', ' ');
+
     try {
-        const result = await query<ResultSetHeader>('INSERT INTO orders (customer, total, date) VALUES (?, ?, ?)', [customer, total, date]);
+        const result = await query<ResultSetHeader>('INSERT INTO orders (customer, total, date) VALUES (?, ?, ?)', [customer, total, formattedDate]);
         return { id: result.insertId, customer, total, date } as Order;
     } catch (err: unknown) {
         throw err;
