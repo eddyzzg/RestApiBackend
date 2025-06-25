@@ -9,6 +9,8 @@ import { connectMySQL, connectMongoDB } from './config/db';
 import authRouter from './routes/auth';
 import usersRouter from './routes/users';
 import subjectsRouter from './routes/subjects';
+import ordersRouter from './routes/orders';
+import productRouter from './routes/product';
 
 // Import middleware do obsługi błędów
 import errorHandler from './middleware/errorHandler';
@@ -32,6 +34,8 @@ async function startApp() {
         // Routery dla zasobów (users, subjects)
         app.use('/users', usersRouter);
         app.use('/subjects', subjectsRouter);
+        app.use('/orders', ordersRouter);
+        app.use('/products', productRouter);
 
         // Główny endpoint powitalny
         app.get('/', (_req: Request, res: Response) => res.send('Backend is running!'));

@@ -1,16 +1,12 @@
 import { getAll as getAllSubjectsFromSql } from '../models/subjectModel';
 import { Subject as SqlSubject } from '../models/subjectModel';
 
-// Import modelu MongoDB dla przedmiotów (założenie: masz go stworzonego)
 import { getAllMongoSubjects, MongoSubjectObject } from '../models/mongo/MongoSubjectModel'; // Importujemy funkcję
 
-// Definicja interfejsu dla połączonego przedmiotu (opcjonalnie, ale dobra praktyka)
 export interface CombinedSubject {
     id: number;
     label: string;
-    value: string | any; // MySQL ma string, Mongo ma any. Lepiej uściślić na string, jeśli zawsze jest stringiem
-    // LUB zrobić 'value: string;' i obsłużyć rzutowanie w MongoSubjectObject
-    // Dla bezpieczeństwa 'any' na razie zostawię, ale preferuj string.
+    value: string | any;
     // Pola specyficzne dla MongoDB
     isFromLoggedUser?: boolean;
     sourceDb: 'mysql' | 'mongodb';
